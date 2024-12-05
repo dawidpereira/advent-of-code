@@ -3,7 +3,7 @@ use std::io::{self, BufRead};
 use std::collections::HashMap;
 
 fn main() -> io::Result<()> {
-    let path = "01.txt";
+    let path = "input.txt";
     let file = File::open(path)?;
     let reader = io::BufReader::new(file);
 
