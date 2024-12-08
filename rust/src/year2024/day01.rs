@@ -21,7 +21,8 @@ pub fn parse(input: &str) -> Input {
 pub fn part1(input: &Input) -> u32 {
     let (left_nums, right_nums) = input.clone();
 
-    left_nums.iter()
+    left_nums
+        .iter()
         .zip(right_nums.iter())
         .map(|(left, right)| left.abs_diff(*right))
         .sum()
@@ -32,12 +33,14 @@ pub fn part2(input: &Input) -> u32 {
     let mut right_map = HashMap::new();
 
     right_nums.iter().for_each(|&right_num| {
-        right_map.entry(right_num)
+        right_map
+            .entry(right_num)
             .and_modify(|e| *e += 1)
             .or_insert(1);
     });
 
-    left_nums.iter()
+    left_nums
+        .iter()
         .filter_map(|left| right_map.get(left).map(|e| left * *e))
         .sum()
 }

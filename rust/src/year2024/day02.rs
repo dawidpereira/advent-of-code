@@ -51,12 +51,9 @@ fn is_safe_sequence(levels: &[u32]) -> bool {
 }
 
 fn check_with_removal(levels: &[u32]) -> bool {
-    levels
-        .iter()
-        .enumerate()
-        .any(|(i, _)| {
-            let mut reduced = levels.to_vec();
-            reduced.remove(i);
-            is_safe_sequence(&reduced)
-        })
+    levels.iter().enumerate().any(|(i, _)| {
+        let mut reduced = levels.to_vec();
+        reduced.remove(i);
+        is_safe_sequence(&reduced)
+    })
 }

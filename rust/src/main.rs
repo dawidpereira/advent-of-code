@@ -28,7 +28,13 @@ fn main() {
     let mut solved = 0;
     let mut duration = Duration::ZERO;
 
-    for Solution { year, day, path, wrapper } in solutions {
+    for Solution {
+        year,
+        day,
+        path,
+        wrapper,
+    } in solutions
+    {
         if let Ok(data) = read_to_string(&path) {
             let instant = Instant::now();
             let (part1, part2) = wrapper(data);
@@ -44,7 +50,10 @@ fn main() {
         } else {
             eprintln!("{BOLD}{RED}{year} Day {day:02}{RESET}");
             eprintln!("    Missing input!");
-            eprintln!("    Place input file in {BOLD}{WHITE}{}{RESET}", path.display());
+            eprintln!(
+                "    Place input file in {BOLD}{WHITE}{}{RESET}",
+                path.display()
+            );
         }
     }
 
@@ -64,7 +73,10 @@ macro_rules! solution {
     ($year:tt, $day:tt) => {{
         let year = stringify!($year);
         let day = stringify!($day);
-        let path = Path::new("input").join(year).join(day).with_extension("txt");
+        let path = Path::new("input")
+            .join(year)
+            .join(day)
+            .with_extension("txt");
 
         let wrapper = |data: String| {
             use $year::$day::*;
@@ -76,7 +88,12 @@ macro_rules! solution {
             (part1.to_string(), part2.to_string())
         };
 
-        Solution { year: year.unsigned(), day: day.unsigned(), path, wrapper }
+        Solution {
+            year: year.unsigned(),
+            day: day.unsigned(),
+            path,
+            wrapper,
+        }
     }};
 }
 

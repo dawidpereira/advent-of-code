@@ -5,20 +5,20 @@
 use std::ops::*;
 
 pub trait Integer<T>:
-Copy
-+ From<u8>
-+ PartialEq
-+ PartialOrd
-+ Add<Output = T>
-+ BitAnd<Output = T>
-+ BitOr<Output = T>
-+ BitXor<Output = T>
-+ Div<Output = T>
-+ Mul<Output = T>
-+ Rem<Output = T>
-+ Shl<Output = T>
-+ Shr<Output = T>
-+ Sub<Output = T>
+    Copy
+    + From<u8>
+    + PartialEq
+    + PartialOrd
+    + Add<Output = T>
+    + BitAnd<Output = T>
+    + BitOr<Output = T>
+    + BitXor<Output = T>
+    + Div<Output = T>
+    + Mul<Output = T>
+    + Rem<Output = T>
+    + Shl<Output = T>
+    + Shr<Output = T>
+    + Sub<Output = T>
 {
     const ZERO: T;
     const ONE: T;

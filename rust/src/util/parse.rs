@@ -64,11 +64,17 @@ impl ParseOps for &str {
     }
 
     fn iter_unsigned<T: Unsigned<T>>(&self) -> ParseUnsigned<'_, T> {
-        ParseUnsigned { bytes: self.bytes(), phantom: PhantomData }
+        ParseUnsigned {
+            bytes: self.bytes(),
+            phantom: PhantomData,
+        }
     }
 
     fn iter_signed<T: Signed<T>>(&self) -> ParseSigned<'_, T> {
-        ParseSigned { bytes: self.bytes(), phantom: PhantomData }
+        ParseSigned {
+            bytes: self.bytes(),
+            phantom: PhantomData,
+        }
     }
 }
 
@@ -109,7 +115,9 @@ fn try_unsigned<T: Unsigned<T>>(bytes: &mut Bytes<'_>) -> Option<T> {
     };
 
     loop {
-        let Some(byte) = bytes.next() else { break Some(n) };
+        let Some(byte) = bytes.next() else {
+            break Some(n);
+        };
         let digit = byte.to_decimal();
 
         if digit < 10 {

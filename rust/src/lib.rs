@@ -1,7 +1,7 @@
-pub mod util{
+pub mod util {
     pub mod ansi;
-    pub mod parse;
     pub mod integer;
+    pub mod parse;
 }
 
 /// # Locate the Chief Historian in time for the big Christmas sleigh launch.
