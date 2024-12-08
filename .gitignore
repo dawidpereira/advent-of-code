@@ -32,3 +32,8 @@ rust-project.json
 /dataSources/
 /dataSources.local.xml
 /.idea
+# macOS
+.DS_Store
+
+# Don't commit input files
+input
