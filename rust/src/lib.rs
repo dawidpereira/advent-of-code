@@ -2,6 +2,9 @@ pub mod util {
     pub mod ansi;
     pub mod integer;
     pub mod parse;
+    pub mod grid;
+    pub mod point;
+    pub mod direction;
 }
 
 /// # Locate the Chief Historian in time for the big Christmas sleigh launch.
