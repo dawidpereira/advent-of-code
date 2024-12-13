@@ -41,7 +41,6 @@ pub fn part1(input: &Input) -> i32 {
         Direction::RightDown, //5
         Direction::LeftDown,  //5
     ];
-
     directions
         .iter()
         .map(|direction| {
