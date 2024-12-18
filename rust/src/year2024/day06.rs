@@ -82,13 +82,12 @@ fn count_loop(
 ) {
     let loop_input = &mut input.clone();
     let obstacles_map: &mut HashSet<(Point, Direction)> = &mut HashSet::new();
-    let mut iterator = &mut GridIterator::new(loop_input, &starting_direction, 1);
+    let iterator = &mut GridIterator::new(loop_input, &starting_direction, 1);
 
     iterator.set_current_position(current_position);
-    if let current_value = iterator.get_current_value() {
-        if current_value == Some('^') || current_value == Some('#') {
-            return;
-        }
+    let current_value = iterator.get_current_value();
+    if current_value == Some('^') || current_value == Some('#') {
+        return;
     }
     let obstacle_candidate = iterator.get_current_position().clone();
 
