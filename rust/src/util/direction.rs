@@ -47,4 +47,29 @@ impl Direction {
             _ => false,
         }
     }
+
+    pub fn parse(c: char) -> Option<Self> {
+        match c {
+            'R' => Some(Direction::Right),
+            'L' => Some(Direction::Left),
+            'U' => Some(Direction::Up),
+            'D' => Some(Direction::Down),
+            '^' => Some(Direction::Up),
+            'v' => Some(Direction::Down),
+            '<' => Some(Direction::Left),
+            '>' => Some(Direction::Right),
+            _ => None,
+        }
+    }
+
+    pub fn turn_right(&self) -> Self {
+        match self {
+            Direction::Right => Direction::Down,
+            Direction::Down => Direction::Left,
+            Direction::Left => Direction::Up,
+            Direction::Up => Direction::Right,
+            Direction::Stop => Direction::Stop,
+            _ => panic!("Invalid direction {:?}", self),
+        }
+    }
 }

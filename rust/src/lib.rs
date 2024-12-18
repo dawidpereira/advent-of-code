@@ -3,6 +3,8 @@ pub mod util {
     pub mod integer;
     pub mod parse;
     pub mod grid;
+    pub mod grid_iterator;
+    pub mod conversions;
     pub mod point;
     pub mod direction;
 }
