@@ -3,7 +3,8 @@ use crate::util::grid::Grid;
 use crate::util::grid_iterator::GridIterator;
 use crate::util::point::Point;
 use std::collections::{HashSet};
-use std::vec;
+use std::{thread, vec};
+use std::sync::{Arc, Mutex};
 
 type Input = Grid<char>;
 
@@ -31,9 +32,11 @@ fn process_grid(
     input: &mut Input,
 ) -> (i32, i32) {
     let mut count = 0;
-    let obstacle: &mut Vec<Point> = &mut Vec::new();
+    let obstacle = Arc::new(Mutex::new(Vec::new()));
     let starting_point = iterator.get_current_position().clone();
     let starting_direction = iterator.get_current_direction().clone();
+
+    let mut handles = vec![];
 
     loop {
         if !iterator.have_next() {
@@ -56,22 +59,40 @@ fn process_grid(
         };
 
         if should_count_loops {
-            count_loop(
-                iterator.get_current_position(),
-                input.clone(),
-                starting_point.clone(),
-                starting_direction.clone(),
-                obstacle,
-            );
+            let pos = iterator.get_current_position().clone();
+            let input_clone = input.clone();
+            let start_point_clone = starting_point.clone();
+            let start_dir_clone = starting_direction.clone();
+            let obstacle_clone = Arc::clone(&obstacle);
+
+            let handle = thread::spawn(move || {
+                let mut local_obstacle = Vec::new();
+                count_loop(
+                    &pos,
+                    input_clone,
+                    start_point_clone,
+                    start_dir_clone,
+                    &mut local_obstacle,
+                );
+                let mut obstacle = obstacle_clone.lock().unwrap();
+                obstacle.extend(local_obstacle);
+            });
+
+            handles.push(handle);
         }
 
         iterator.next(false);
-        continue;
     }
 
-    let distinct_obstacles: HashSet<_> = obstacle.into_iter().collect();
-    (count, distinct_obstacles.iter().count() as i32)
+    for handle in handles {
+        handle.join().expect("Thread panicked");
+    }
+
+    let distinct_obstacles: HashSet<_> = obstacle.lock().unwrap().iter().cloned().collect();
+    (count, distinct_obstacles.len() as i32)
 }
+
+
 
 fn count_loop(
     current_position: &Point,
