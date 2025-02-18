@@ -60,11 +60,11 @@ where
     /// Panics if the direction provided results in invalid initial configuration.
     pub fn new(grid: &'i mut Grid<T>, direction: &Direction, offset: i32) -> Self {
         let can_change_axis = direction.is_diagonal();
-        let starting_point = grid.get_starting_point(&direction);
+        let starting_point = grid.get_starting_point(direction);
         Self {
             grid,
-            line_start: starting_point.clone(),
-            current: starting_point.clone(),
+            line_start: starting_point,
+            current: starting_point,
             direction: *direction,
             offset,
             can_change_axis,
@@ -103,40 +103,37 @@ where
             Direction::Down => self.handle_one_direction(&Direction::Down, &Direction::Right),
             Direction::Left => self.handle_one_direction(&Direction::Left, &Direction::Up),
             Direction::Up => self.handle_one_direction(&Direction::Up, &Direction::Left),
-
             Direction::RightDown => {
                 self.handle_diagonal_direction(&Direction::Right, &Direction::Down)
             }
-
             Direction::LeftDown => {
                 self.handle_diagonal_direction(&Direction::Left, &Direction::Down)
             }
-
             Direction::RightUp => self.handle_diagonal_direction(&Direction::Right, &Direction::Up),
-
             Direction::LeftUp => self.handle_diagonal_direction(&Direction::Left, &Direction::Up),
             Direction::Stop => self.brake(),
         }
     }
 
-    /// Sets the current position of the iterator within the grid.
-    ///
-    /// This function updates the iterator's current position to the specified point. It ensures
-    /// that the new position is within the bounds of the grid.
-    ///
-    /// # Arguments
-    ///
-    /// * `point` - A reference to the `Point` to which the iterator's position should be set.
-    ///
-    /// # Panics
-    ///
-    /// * The function will panic if the `point` is outside the bounds of the grid.
+    /**
+    Sets the current position of the iterator within the grid.
 
+    This function updates the iterator's current position to the specified point. It ensures
+    that the new position is within the bounds of the grid.
+
+    # Arguments
+
+    * `point` - A reference to the `Point` to which the iterator's position should be set.
+
+    # Panics
+
+    * The function will panic if the `point` is outside the bounds of the grid.
+    */
     pub fn set_current_position(&mut self, point: &Point) {
         if point.x < 0 || point.y < 0 || point.x >= self.grid.width || point.y >= self.grid.height {
             panic!("Invalid point: {:?}. Bounds exceeded", point);
         }
-        self.current = point.clone();
+        self.current = *point;
     }
 
     /// Sets the value at the current position of the iterator in the grid.
@@ -159,7 +156,7 @@ where
     ///
     /// * `direction` - A reference to the new `Direction` for the iterator.
     pub fn change_direction(&mut self, direction: &Direction) {
-        self.direction = direction.clone();
+        self.direction = *direction;
         self.can_change_axis = direction.is_diagonal();
         self.have_next = !self
             .grid
@@ -263,7 +260,7 @@ where
             let current = self.get_current_position();
             let val = self.get_current_value().unwrap().clone(); // Clone the value
             if f(find, val.clone()) {
-                result = Some((val, current.clone()));
+                result = Some((val, *current));
                 break;
             }
 
@@ -282,15 +279,16 @@ where
         self.have_next
     }
 
-    /// Retrieves the current position of the iterator within the grid.
-    ///
-    /// This function returns the current position as a `Point`, indicating where
-    /// the iterator is currently located in the grid.
-    ///
-    /// # Returns
-    ///
-    /// * A reference to the `Point` representing the current position of the iterator.
+    /**
+    Retrieves the current position of the iterator within the grid.
 
+    This function returns the current position as a `Point`, indicating where
+    the iterator is currently located in the grid.
+
+    # Returns
+
+    * A reference to the `Point` representing the current position of the iterator.
+    */
     pub fn get_current_position(&self) -> &Point {
         &self.current
     }
@@ -308,12 +306,13 @@ where
         self.grid.get_value(&self.current)
     }
 
-    /// Retrieves the current direction of the iterator.
-    ///
-    /// # Returns
-    ///
-    /// * A reference to the current `Direction` of the iterator.
+    /**
+    Retrieves the current direction of the iterator.
 
+    # Returns
+
+    * A reference to the current `Direction` of the iterator.
+    */
     pub fn get_current_direction(&self) -> &Direction {
         &self.direction
     }
@@ -330,7 +329,9 @@ where
     ///
     /// * `true` if the iterator can move in the specified direction without exceeding bounds, `false` otherwise.
     pub fn can_move(&self, direction: &Direction) -> bool {
-        !self.grid.exced_bounds(&self.current, direction, self.offset)
+        !self
+            .grid
+            .exced_bounds(&self.current, direction, self.offset)
     }
 
     /// Determines the next point when moving in a linear direction.
@@ -380,7 +381,7 @@ where
             let next_point = next_step_direction.to_point();
             if !self.grid.exced_bounds(
                 &next_point.add(&self.line_start),
-                &next_step_direction,
+                next_step_direction,
                 self.offset,
             ) {
                 self.line_start = self.line_start.add(&next_point);
@@ -401,7 +402,7 @@ where
         // Check if next step exceeds the grid bounds and brake if it does
         if self.grid.exced_bounds(
             &new_line_point.add(&self.line_start),
-            &new_line_direction,
+            new_line_direction,
             self.offset - 1,
         ) {
             return self.brake();
@@ -417,7 +418,7 @@ where
     }
 
     fn restore(&mut self, original_position: &Point, original_direction: &Direction) {
-        self.current = original_position.clone();
-        self.direction = original_direction.clone();
+        self.current = *original_position;
+        self.direction = *original_direction;
     }
 }
