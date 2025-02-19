@@ -2,9 +2,9 @@ use crate::util::direction::Direction;
 use crate::util::grid::Grid;
 use crate::util::grid_iterator::GridIterator;
 use crate::util::point::Point;
-use std::collections::{HashSet};
-use std::{thread, vec};
+use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
+use std::{thread, vec};
 
 type Input = Grid<char>;
 
@@ -91,8 +91,6 @@ fn process_grid(
     let distinct_obstacles: HashSet<_> = obstacle.lock().unwrap().iter().cloned().collect();
     (count, distinct_obstacles.len() as i32)
 }
-
-
 
 fn count_loop(
     current_position: &Point,
