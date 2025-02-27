@@ -22,7 +22,7 @@ pub fn part1(input: &Input) -> i32 {
         .iter()
         .map(|direction| {
             let mut iterator = GridIterator::new(input, direction, 4);
-            iterator.count(|grid, check_point, step, chunk_size| {
+            iterator.count_with(|grid, check_point, step, chunk_size| {
                 search_part1(grid, check_point, step, chunk_size, &SEARCH_PATTERN)
             })
         })
@@ -33,7 +33,7 @@ pub fn part2(input: &Input) -> i32 {
     let input: &mut Input = &mut input.clone();
     let direction = &Direction::RightDown;
     let mut iterator = GridIterator::new(input, &direction, 3);
-    iterator.count(|grid, check_point, step, chunk_size| {
+    iterator.count_with(|grid, check_point, step, chunk_size| {
         search_part2(grid, check_point, step, chunk_size)
     })
 }

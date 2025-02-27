@@ -160,16 +160,14 @@ where
                 // Parse using delimiter
                 line.split(delim)
                     .map(|s| {
-                        T::from_str(s)
-                            .map_err(|e| format!("Conversion error: {:?}", e).into())
+                        T::from_str(s).map_err(|e| format!("Conversion error: {:?}", e).into())
                     })
                     .collect::<Result<Vec<T>, Box<dyn Error>>>()? // Specify the error type
             } else {
                 // Parse character by character
                 line.chars()
                     .map(|c| {
-                        T::from_char(c)
-                            .map_err(|e| format!("Conversion error: {:?}", e).into())
+                        T::from_char(c).map_err(|e| format!("Conversion error: {:?}", e).into())
                     })
                     .collect::<Result<Vec<T>, Box<dyn Error>>>()? // Specify the error type
             };
@@ -215,5 +213,30 @@ where
     /// * `value` - The value to set at the specified point.
     pub fn set_value(&mut self, point: &Point, value: T) {
         self.data[point.y as usize][point.x as usize] = value;
+    }
+
+    /// Creates new grid with the same size filled by predefined value.
+    ///
+    /// # Aeguments
+    /// * `value` - The value to set at all points
+    ///
+    pub fn same_size_with<U>(&self, value: U) -> Grid<U>
+    where
+        U: Default + Clone + Debug + PartialEq,
+        U: FromStr + FromChar,
+        <U as FromStr>::Err: Debug,
+        <U as FromChar>::Err: Debug,
+    {
+        let data = vec![vec![value.clone(); self.width as usize]; self.height as usize];
+        Grid::new(data, self.width)
+    }
+
+    /// Checks if the given point is within the grid boundaries.
+    ///
+    /// # Aeguments
+    /// * `point` - A reference to a `Point` representing the position in the grid.
+    ///
+    pub fn contains(&self, point: &Point) -> bool {
+        point.y >= 0 && point.x >= 0 && self.width > point.x && self.height > point.y
     }
 }

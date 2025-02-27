@@ -191,7 +191,7 @@ where
     ///
     /// * The function will panic if the `direction` is invalid. Ensure that the `direction`
     ///   is valid to prevent this panic.
-    pub fn count<F>(&mut self, f: F) -> i32
+    pub fn count_with<F>(&mut self, f: F) -> i32
     where
         F: Fn(&Grid<T>, &Point, &Point, &i32) -> bool,
     {
@@ -210,6 +210,41 @@ where
 
             if is_valid {
                 count += 1;
+            }
+
+            self.next(true);
+        }
+
+        self.restore(&original_position, &original_direction);
+
+        count
+    }
+
+    ///
+    /// Counts the number of points in the grid that satisfy a given condition.
+    ///
+    /// This function iterates over the grid and applies a specified condition to each point.
+    /// # Arguments
+    /// * `value` - The value to count in the grid.
+    ///
+    /// # Returns
+    ///
+    /// * i32 - The count of points that satisfy the condition specified by `f`.
+    pub fn count(&mut self, value: &T) -> i32 {
+        let original_position = self.current;
+        let original_direction = self.direction;
+
+        let mut count = 0;
+
+        loop {
+            if !self.have_next() {
+                break;
+            }
+
+            let val = &self.get_current_value().unwrap_or_default();
+
+            if val == value {
+                count += 1
             }
 
             self.next(true);
