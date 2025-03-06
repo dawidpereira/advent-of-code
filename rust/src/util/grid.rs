@@ -199,10 +199,10 @@ where
     /// # Returns
     /// * An `Option<T>` containing the value at the specified point, or `None` if the point is out of bounds or the value is the default value of `T`.
     pub fn get_value(&self, point: &Point) -> Option<T> {
-        let val = self.data[point.y as usize][point.x as usize].clone();
-        if val == T::default() {
+        if !self.contains(point) {
             return None;
         }
+        let val = self.data[point.y as usize][point.x as usize].clone();
         Some(val)
     }
 
@@ -238,5 +238,10 @@ where
     ///
     pub fn contains(&self, point: &Point) -> bool {
         point.y >= 0 && point.x >= 0 && self.width > point.x && self.height > point.y
+    }
+
+    /// Returns the total number of elements in the grid.
+    pub fn get_size(&self) -> i32 {
+        self.width * self.height
     }
 }

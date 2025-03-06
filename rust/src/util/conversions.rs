@@ -24,3 +24,17 @@ impl FromChar for char {
         Ok(c)
     }
 }
+
+impl FromChar for usize {
+    type Err = std::num::ParseIntError;
+    fn from_char(c: char) -> Result<Self, Self::Err> {
+        c.to_string().parse()
+    }
+}
+
+impl FromChar for i32 {
+    type Err = std::num::ParseIntError;
+    fn from_char(c: char) -> Result<Self, Self::Err> {
+        c.to_string().parse()
+    }
+}

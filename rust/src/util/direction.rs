@@ -15,6 +15,13 @@ pub enum Direction {
     Stop,
 }
 
+pub const ORTHOGONAL: [Direction; 4] = [
+    Direction::Right,
+    Direction::Down,
+    Direction::Left,
+    Direction::Up,
+];
+
 impl Direction {
     /// Get the point for the direction
     /// # Returns
@@ -68,6 +75,17 @@ impl Direction {
             Direction::Down => Direction::Left,
             Direction::Left => Direction::Up,
             Direction::Up => Direction::Right,
+            Direction::Stop => Direction::Stop,
+            _ => panic!("Invalid direction {:?}", self),
+        }
+    }
+
+    pub fn turn_left(&self) -> Self {
+        match self {
+            Direction::Right => Direction::Up,
+            Direction::Down => Direction::Right,
+            Direction::Left => Direction::Down,
+            Direction::Up => Direction::Left,
             Direction::Stop => Direction::Stop,
             _ => panic!("Invalid direction {:?}", self),
         }
