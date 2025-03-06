@@ -68,12 +68,11 @@ pub fn part2(input: &Input) -> u64 {
             }
         } else {
             let mut empty_block_size = block_size;
+
             while empty_block_size > 0 {
                 for index in (0..=right).rev().step_by(2) {
                     if index <= left || empty_block_size == 0 {
-                        for _ in 0..empty_block_size {
-                            disk_memory.resize(disk_memory.len() + input[left] as usize, 0);
-                        }
+                        disk_memory.resize(disk_memory.len() + empty_block_size as usize, 0);
                         empty_block_size = 0;
                         break;
                     }
